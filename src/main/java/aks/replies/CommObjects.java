@@ -17,12 +17,12 @@ public class CommObjects {
 
     public Commands returnObject(String string){
         if(list.contains(string)){
-            System.out.println("fk yea");
-        }
-        switch(string){
-            case "/email": return rEmail;
-            case "/ccp": return rCcp;
-            // case "/confirm": return rConfirm;
+            
+            switch(string){
+                case "/email": return rEmail;
+                case "/ccp": return rCcp;
+                // case "/confirm": return rConfirm;
+            }
         }
         return null;
     }

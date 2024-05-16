@@ -1,5 +1,12 @@
 package aks;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URI;
+import java.net.URL;
+
+import org.glassfish.jersey.client.internal.HttpUrlConnector;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
@@ -25,13 +32,17 @@ public class Bot extends TelegramLongPollingBot{
             sendImageCaption(update.getMessage().getChatId().toString(), Strings.GIFTS_BANNER, "📦 𝐓𝐨 𝐬𝐭𝐚𝐫𝐭 𝐲𝐨𝐮𝐫 𝐨𝐫𝐝𝐞𝐫 /order");
         }
         if(update.getMessage().getText().equals("/order") && state == 0){
-            reply(update.getMessage().getChatId().toString(), "You are about to order a code, type /email to input the email where you want to recieve your code, then /ccp to input your ccp number (10 numbers)");
+            reply(update.getMessage().getChatId().toString(), "1️⃣ /email 𝐭𝐨 𝐬𝐞𝐧𝐝 𝐲𝐨𝐮𝐫 𝐞𝐦𝐚𝐢𝐥. \n\n2️⃣ /ccp 𝐭𝐨 𝐬𝐞𝐧𝐝 𝐂𝐂𝐏. \n\n3️⃣ /confirm 𝐭𝐨 𝐜𝐨𝐧𝐟𝐢𝐫𝐦");
             commObjects.rEmail.canSend = true;
         }
         if(update.getMessage().getText().equals("/confirm") && state == 0){
             if(commObjects.rConfirm.canSend){
                 commObjects.rConfirm.action(update);
             }
+        }
+        if(update.getMessage().getText().equals("/test")){
+            test();
+            System.out.println("niggering");
         }
 
 
@@ -123,5 +134,30 @@ public class Bot extends TelegramLongPollingBot{
         command.action(update);
         state = 0;
         
+    }
+    public void test(){
+        String link = "http://sbah.duckdns.org/api/v1/orders/get";
+        URI uri = URI.create(link);
+
+        try{
+            URL url = uri.toURL();
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            if(connection.getResponseCode() == HttpURLConnection.HTTP_OK){
+                BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                StringBuilder sb = new StringBuilder();
+                String line = "";
+
+
+                while((line = br.readLine()) != null){
+                    sb.append(line);
+                }
+
+                System.out.println(sb.toString());
+            }else{
+                System.out.println(connection.getResponseCode());
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 }
