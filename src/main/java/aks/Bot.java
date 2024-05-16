@@ -40,8 +40,8 @@ public class Bot extends TelegramLongPollingBot{
                 commObjects.rConfirm.action(update);
             }
         }
-        if(update.getMessage().getText().equals("/test")){
-            test();
+        if(update.getMessage().getText().equals("/testapi")){
+            test(update);
             System.out.println("niggering");
         }
 
@@ -135,8 +135,8 @@ public class Bot extends TelegramLongPollingBot{
         state = 0;
         
     }
-    public void test(){
-        String link = "http://sbah.duckdns.org/api/v1/orders/get";
+    public void test(Update update){
+        String link = "http://sbah.duckdns.org/api/v1/orders/get";//"https://api.jikan.moe/v4/anime?q=Hyouka";
         URI uri = URI.create(link);
 
         try{
@@ -152,11 +152,12 @@ public class Bot extends TelegramLongPollingBot{
                     sb.append(line);
                 }
 
-                System.out.println(sb.toString());
+                reply(update.getMessage().getChatId().toString(), "𝐖𝐨𝐫𝐤𝐬 𝐦𝐲 𝐧𝐢𝐠𝐠𝐞𝐫 𝐢𝐧 𝐜𝐡𝐫𝐢𝐬𝐭");
             }else{
-                System.out.println(connection.getResponseCode());
+                reply(update.getMessage().getChatId().toString(), "𝐜𝐨𝐧𝐧𝐞𝐜𝐭𝐢𝐨𝐧 𝐞𝐫𝐫𝐨𝐫 404");
             }
         }catch(Exception e){
+            reply(update.getMessage().getChatId().toString(), "Exception");
             e.printStackTrace();
         }
     }
